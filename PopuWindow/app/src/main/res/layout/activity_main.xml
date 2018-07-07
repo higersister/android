@@ -12,7 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_margin="10dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="10dp"
         android:text="bottom" />
 
     <Button
@@ -20,6 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="left"
+        android:layout_margin="10dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/btn_popu1" />
 
@@ -28,6 +30,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="right"
+        android:layout_margin="10dp"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/btn_popu2" />
+
+    <Button
+        android:id="@+id/btn_popu4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="top"
+        android:layout_margin="10dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/btn_popu3" />
 </RelativeLayout>

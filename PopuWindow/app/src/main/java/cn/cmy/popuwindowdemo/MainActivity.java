@@ -16,6 +16,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Button mBtnPopupRight;
 
+    private Button mBtnPopupTop;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,12 +63,26 @@ public class MainActivity extends AppCompatActivity {
                     size(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).
                     setAnimationStyle(R.style.MyPopupWindow_anim_style).
                     create().
-                    showAsDropDown(mBtnPopupRight, -mShowPopupWindowWidth  + mBtnPopupRight.getWidth(), mShowPopupWindowHeight);
+                    showAsDropDown(mBtnPopupRight, -mShowPopupWindowWidth + mBtnPopupRight.getWidth(), mShowPopupWindowHeight);
             //   showAtLocation(mBtnPopupRight,Gravity.NO_GRAVITY,location[0] +mBtnPopupRight.getWidth() , location[1]);
             // showAsDropDown(mBtnPopupRight, -mShowPopupWindowWidth, -mShowPopupWindowHeight);
             /*  Log.i("************", "init: location[0]:" + location[0] + ",location[1]:" + location[1]);
             Log.i("************", "init: location[0] + mBtnPopupRight.getWidth:" + location[0] + mBtnPopupRight.getWidth() +  ",location[1]:" + location[1]);
 */
+        });
+
+        mBtnPopupTop = findViewById(R.id.btn_popu4);
+        mBtnPopupTop.setOnClickListener(V -> {
+            int[] location = new int[2];
+            mBtnPopupTop.getLocationOnScreen(location);
+            Log.i("**********", "setOnClickListener: locatioin[0]:" + location[0] + ",location[1]:" + location[1]);
+            CustomPopWindow customPopWindow = new CustomPopWindow.PopupWindowBuilder(this).
+                    setView(view1).
+                    size(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT).
+                    setAnimationStyle(R.style.MyPopupWindow_anim_style).
+                    create().
+                    showAtLocation(mBtnPopupTop, Gravity.NO_GRAVITY, (location[0] + mBtnPopupTop.getWidth() / 2) - mShowPopupWindowWidth / -2, location[1] - -mShowPopupWindowHeight);
+
         });
     }
 }
