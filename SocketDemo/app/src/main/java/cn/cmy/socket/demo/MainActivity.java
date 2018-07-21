@@ -1,5 +1,6 @@
 package cn.cmy.socket.demo;
 
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.os.Handler;
 import android.os.Message;
@@ -8,9 +9,11 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,14 +38,24 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
 
-            Bundle bundle = msg.getData();
-            Info info = new Info(bundle.getString("info"),
-                    bundle.getInt("type"));
-            Log.i("********", "handleMessage: info:" + bundle.getString("info"));
-            mLists.add(info);
+           switch (msg.what){
+               case 0x00:
+                   Toast.makeText(getApplicationContext(),
+                           "server not avaliable",
+                           Toast.LENGTH_SHORT).show();
+                   mBtnSend.setVisibility(View.GONE);
+                   break;
+                   default:
+                       Bundle bundle = msg.getData();
+                       Info info = new Info(bundle.getString("info"),
+                               bundle.getInt("type"));
+                       Log.i("********", "handleMessage: info:" + bundle.getString("info"));
+                       mLists.add(info);
 //            mTvCurrentNumInfo.setText(msg.obj.toString());
-            mEtMsg.setText("");
-            mAdpter.notifyDataSetChanged();
+                       mEtMsg.setText("");
+                       mAdpter.notifyDataSetChanged();
+                       break;
+           }
 
         }
     };
@@ -85,6 +98,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (mClient.getSocket() == null){
+            System.exit(0);
+        }
         mClient.shutdown();
     }
 }

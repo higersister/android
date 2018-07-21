@@ -20,6 +20,10 @@ public class Client {
 
     private String msg;
 
+    public Socket getSocket() {
+        return socket;
+    }
+
     public String getMsg() {
         return msg;
     }
@@ -43,7 +47,10 @@ public class Client {
                            6666);
                    receive(socket.getInputStream());
                } catch (IOException e) {
-                   e.printStackTrace();
+                   Message message = new Message();
+                   message.what = 0x00;
+                   message.obj = e.getMessage();
+                   handler.sendMessage(message);
                }
            }).start();
             System.out.println("client start...");
