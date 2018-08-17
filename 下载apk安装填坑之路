@@ -1,0 +1,47 @@
+   当我们在7.0上使用系统服务去下载apk并且试图安装时，有可能由于权限问题导致安装失败。 
+每个Android版本的发布，对于安全性问题的要求越来越高，也为Android程序员增加了额外的工作量。Android6.0引入动态权限控制(Runtime Permissions)，Android7.0引入私有目录被限制访问和StrictMode API 。私有目录被限制访问是指在Android7.0中为了提高应用的安全性，在7.0上应用私有目录将被限制访问，这与iOS的沙盒机制类似。StrictMode API是指禁止向你的应用外公开 file:// URI。 如果一项包含文件 file:// URI类型 的 Intent 离开你的应用，则会报出异常。
+   Android 7.0 行为变更，通过 FileProvider 在应用中共享文件
+Android 7.0 除了提供诸多新特性和功能外，还对系统和 API 行为做出了各种变更。其中有一条，对日常开发的适配影响是非常大的，传递软件包网域外的 file:// URI 可能给接收器留下无法访问的路径。因此，尝试传递 file:// URI 会触发 FileUriExposedException。解决方法是使用 FileProvider 将 file:// URI 转换为 content:// URI 。
+   使用fileprovider
+<provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="包名.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+        并创建xml格式的provider_paths
+        <paths xmlns:android="http://schemas.android.com/apk/res/android">
+    <external-path name="external_files" path="."/>
+</paths>
+   /*安装apk*/
+    public static void installApk( String baseUrl, Context context) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        File file = new File(baseUrl);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            Uri apkUri = FileProvider.getUriForFile(context,
+                    "包名.fileprovider", file);
+            Log.i(TAG, "installApk: apkUri:" + apkUri.toString());
+            //添加这一句表示对目标应用临时授权该Uri所代表的文件
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setDataAndType(apkUri,
+                    "application/vnd.android.package-archive");
+        } else {
+            intent.setDataAndType(Uri.fromFile(file),
+                    "application/vnd.android.package-archive");
+        }
+        context.startActivity(intent);
+
+    }
+    安卓开发者应该都知道，安卓 8.0 开始限制了“允许安装未知来源软件”的开关，在此之前是可以在手机的设置里面找到此入口，打开即可；当然，解决这个问题并不难，只需要在 AndroidManifest.xml 中添加下面这行代码即可：
+
+<uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
+note:vivo x21就不支持这个测试apk（网上有人这样说，经过验证，不假，在找答案的过程中，看到过很多吐槽：vivo x21不适合做测试机，因为它只认正式包）
+    
+        
+        
