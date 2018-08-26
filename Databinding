@@ -22,6 +22,9 @@ xml:
  app:background="@{img.id}"
 实现双向绑定
 
+Observable objects
+因为Observable是个接口，Google为我们提供了一个BaseObservable类，我们只要把Model类继承自它就获得了通知UI更新数据的能力了，然后再getter方法上添加Bindable注解，在setter方法中使用notifying提醒UI更新数据。
+
 1、给之前的get方法添加 "@Bindable"注解
 2、给之前的set方法的最后边添加"notifyPropertyChanged(BR.字段)"
 步骤一的作用就是通过注解的方式，来标记此get属性方法，将来是要自动触发的动作
