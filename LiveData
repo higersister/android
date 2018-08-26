@@ -1,0 +1,109 @@
+LiveData 是一个数据持有者类，它持有一个值并允许观察该值。不同于普通的可观察者，LiveData 遵守应用程序组件的生命周期，以便 Observer 可以指定一个其应该遵守的 Lifecycle。
+
+LiveData实现了对数据的监听，利用这点，我们可以更好的实现获取数据和数据展示解耦。本文着重讲解数据更新和更新UI逻辑分离，LiveData的LifeCycle特性暂不做介绍。
+
+下文用一个简单的例子来介绍如何实现数据更新和UI展示解耦，实现逻辑分离。
+
+UI展示逻辑代码如下：
+private MutableLiveData<String> username;
+
+    private TextView tvUsername;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_live_data);
+
+        tvUsername = findViewById(R.id.tv_username);
+
+        username = new MutableLiveData<>();
+
+        username.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                tvUsername.setText(s);
+            }
+        });
+    }
+上面代码对应的布局文件代码如下：
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.ihognqiqu.aac.livedata.LiveDataActivity">
+
+    <TextView
+        android:id="@+id/tv_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="40dp"
+        android:text="Default User Name"
+        android:textSize="20dp" />
+
+    <Button
+        android:id="@+id/tv_change_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:onClick="onClickMainThread"
+        android:text="Change User Name main thread" />
+
+    <Button
+        android:id="@+id/tv_change_username_background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:onClick="onClickThread"
+        android:text="Change User Name background" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:text="一个数据持有类，持有数据并且这个数据可以被观察被监听，和其他Observer不同的是，它和Lifecycle是绑定的。"
+        android:textColor="@color/colorPrimary"
+        android:textSize="17dp" />
+
+
+</LinearLayout>
+从上面代码可以发现，除了基本的初始化操作、设置监听，只剩下UI赋值逻辑。
+
+主线程更新数据代码（点击id为tv_change_username的按钮执行下面的方法）：
+
+/**
+  * 主线程中更新数据
+  * @param view
+  */
+ public void onClickMainThread(View view) {
+     username.setValue("New User Name by main thread");
+ }
+子线程更新数据代码如下（点击id为tv_change_username_background的按钮执行下面这个方法）：
+
+
+/**
+  * 子线程中更新数据
+  * @param view
+  */
+ public void onClickThread(View view) {
+     new Thread(new Runnable() {
+         @Override
+         public void run() {
+             try {
+                 Thread.sleep(2000);
+             } catch (InterruptedException e) {
+                 e.printStackTrace();
+             }
+             username.postValue("New User Name by background thread");
+         }
+     }).start();
+ }
+从上面同步和异步两个方法，可以发现这里只有对数据的更新逻辑，没有任何UI更新的逻辑。
+
+例子很简单，通过使用LiveData，我们实现了业务逻辑和UI更新逻辑分离。通过使用LiveData可以使我们的架构设计更加合理，职责分工更加明确。从小的方面来看，实现了解耦代码分离，从大的方面说，这会改变应用架构设计。
+参考地址：https://www.ihongqiqu.com/2017/12/14/Android-LiveData/
