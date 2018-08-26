@@ -21,50 +21,24 @@ java:
 xml:
  app:background="@{img.id}"
 实现双向绑定
-public class UserBean extends BaseObservable {
-
-    public ObservableField<String> name = new ObservableField<>();
-
-    public ObservableField<Integer> age = new ObservableField<>();
-
-    public UserBean() {
-    }
-
-    public UserBean(String name, int age) {
-        this.name.set(name);
-        this.age.set(age);
-    }
-
-    @Bindable
-    public String getName(){
-        return name.get();
-    }
-
-    public void setName(String name){
-        this.name.set(name);
-        notifyPropertyChanged(BR.name);
-    }
-
-    @Bindable
-    public int getAge() {
-        return this.age.get();
-    }
-
-    public void setAge(int age) {
-        this.age.set(age);
-        notifyPropertyChanged(BR.age);
-
-    }
-
-}
 
 1、给之前的get方法添加 "@Bindable"注解
 2、给之前的set方法的最后边添加"notifyPropertyChanged(BR.字段)"
 步骤一的作用就是通过注解的方式，来标记此get属性方法，将来是要自动触发的动作
 而步骤二的作用则是，当数据发生变化时，发出此属性已经改变的通知，从而让dataBinding框架去自动调用get方法
 
+ObservableFields
+我们刚刚介绍的通知UI更新的方法是用User类继承自BaseObservable，然后在getter上添加注解、在setter中添加notify方法，这感觉总是有点麻烦，步骤繁琐，于是，Google推出ObservableFields类，使用它我们可以简化我们的Model类，如：
+public class User{
+    public final ObservableField<String> userName = new ObservableField<>();
+    public final ObservableField<String> userPassword = new ObservableField<>();
+}
 
-用 public ObservableField<String> name = new ObservableField<>()这种方式来创建属性，ObservableField的作用是，当我们实体类中的值发生改变时会自动通知View刷新。用 name.get()获取属性值，用name.set()设置属性值。若想改变一个字段，需要该字段的get方法添加上@Bindable注解，然后给该字段的set方法加上 notifyPropertyChanged(BR.字段名)。
+当然ObservableField<T>中传入的泛型可以是java中的基本类型，当然我们还可以使用 ObservableBoolean, ObservableByte, ObservableChar, ObservableShort, ObservableInt, ObservableLong, ObservableFloat, ObservableDouble, ObservableParcelable等具体的类型，效果也和ObservableField<T>是一样的
+
+Observable Collections
+Google也为我们提供了一些通知类型的集合，有这三种：ObservableArrayList<T>、ObservableArrayMap<K,V>、ObservableMap<K,V>，它和平场使用的List、Map用法一样，但是多了通知功能。 
+我们在layout中的<data>区域导入包后就可以直接用它了，当它内部的数据发生改变时就自动会通知UI界面更新。
 
 ViewModel仅仅专注于业务的逻辑处理,只做和业务逻辑和业务数据相关的事，UI相关的事情不要写在这里面，ViewModel 层不会持有任何控件的引用，更不会在ViewModel中通过UI控件的引用去做更新UI的事情。但是ViewModel可能会改变数据，由于数据和UI已经绑定到一起了，所以相应的控件上会自动去更新UI。
 
