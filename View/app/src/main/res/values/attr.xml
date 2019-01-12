@@ -5,7 +5,12 @@
 
         <attr name="progressBackground" format="color"></attr>
         <attr name="circleBackground" format="color"></attr>
+    </declare-styleable>
 
+    <declare-styleable name="LoadingView">
+
+        <attr name="loadingBackground" format="color"/>
+        <attr name="isRound" format="boolean"/>
 
     </declare-styleable>
 

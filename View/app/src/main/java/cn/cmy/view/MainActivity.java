@@ -38,14 +38,14 @@ public class MainActivity extends AppCompatActivity {
              mManager = null;
          }
      };*/
-    private BezierView mBezier;
+  //  private BezierView mBezier;
     private FloatingMenu mMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        init();
+       // init();
         //initView();
         mMenu = findViewById(R.id.floating_menu);
         mMenu.setSubMenuListener((v, position) -> {
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void init() {
+    /*private void init() {
         mBezier = findViewById(R.id.bezier_view);
         mBezier.setProgress(10);
         mBezier.setTextChangeListener(new BezierView.OnTextChangeListener() {
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }).start();
 
-    }
+    }*/
 
     /*private void initView() {
         mBtnAdd = findViewById(R.id.btn_add);
