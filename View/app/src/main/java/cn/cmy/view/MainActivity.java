@@ -7,36 +7,79 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+
+import cn.cmy.view.view.BezierView;
+import cn.cmy.view.view.FloatingMenu;
+
 public class MainActivity extends AppCompatActivity {
 
-   /* private Button mBtnAdd;
-    private boolean mBound;
-    private ICarManager mManager;
-    private final ServiceConnection conn = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            mBound = true;
-            mManager = ICarManager.Stub.asInterface(service);
-        }
+    /* private Button mBtnAdd;
+     private boolean mBound;
+     private ICarManager mManager;
+     private final ServiceConnection conn = new ServiceConnection() {
+         @Override
+         public void onServiceConnected(ComponentName name, IBinder service) {
+             mBound = true;
+             mManager = ICarManager.Stub.asInterface(service);
+         }
 
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            mBound = false;
-            mManager = null;
-        }
-    };*/
+         @Override
+         public void onServiceDisconnected(ComponentName name) {
+             mBound = false;
+             mManager = null;
+         }
+     };*/
+    private BezierView mBezier;
+    private FloatingMenu mMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        init();
         //initView();
+        mMenu = findViewById(R.id.floating_menu);
+        mMenu.setSubMenuListener((v, position) -> {
+            Toast.makeText(this, "click:" + position, Toast.LENGTH_SHORT).show();
+        });
+
+
+    }
+
+    private void init() {
+        mBezier = findViewById(R.id.bezier_view);
+        mBezier.setProgress(10);
+        mBezier.setTextChangeListener(new BezierView.OnTextChangeListener() {
+            @Override
+            public String onTextChange(double percent, float maxValue) {
+                return String.format("%.2f%%", percent * maxValue);
+            }
+        });
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 1; i <= 100; i++) {
+                    final int finalI = i;
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mBezier.setProgress(finalI);
+                        }
+                    });
+                    SystemClock.sleep(30);
+                }
+            }
+        }).start();
+
     }
 
     /*private void initView() {

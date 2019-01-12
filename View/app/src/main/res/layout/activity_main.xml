@@ -6,8 +6,87 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <cn.cmy.view.view.FloatingMenu
+        android:id="@+id/floating_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <cn.cmy.view.view.RefreshLayout
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <cn.cmy.view.view.BezierView
+                android:id="@+id/bezier_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                />
+
+        </FrameLayout>
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_add_circle_red_24dp"
+            />
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_add_circle_b_24dp"
+            />
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_add_circle_z_24dp"
+            />
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_add_circle_c_24dp"
+            />
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_add_circle_c_24dp"
+            />
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_add_circle_c_24dp"
+            />
+
+
+    </cn.cmy.view.view.FloatingMenu>
+
+
+   <!-- <cn.cmy.view.view.StickView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+-->
+    <!--  <cn.cmy.view.view.BezierView
+          android:id="@+id/bezier_view"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_marginStart="8dp"
+          android:layout_marginLeft="8dp"
+          android:layout_marginTop="8dp"
+          android:layout_marginEnd="8dp"
+          android:layout_marginRight="8dp"
+          android:layout_marginBottom="8dp"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--<cn.cmy.view.view.RefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -29,7 +108,7 @@
 
         </FrameLayout>
 
-    </cn.cmy.view.view.RefreshLayout>
+    </cn.cmy.view.view.RefreshLayout>-->
 
 
 </android.support.constraint.ConstraintLayout>
