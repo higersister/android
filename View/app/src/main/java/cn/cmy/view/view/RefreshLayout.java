@@ -3,6 +3,7 @@ package cn.cmy.view.view;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Point;
+import android.graphics.PointF;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
@@ -11,12 +12,17 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Scroller;
 import android.widget.TextView;
 
+import cn.cmy.view.R;
+
 public class RefreshLayout extends ViewGroup {
 
+    private static final int UP = 1;
+    private static final int DOWN = 0;
     private Scroller mScroller;
     private ViewGroup mVp;
     private ImageView mImgIcon;
@@ -26,6 +32,8 @@ public class RefreshLayout extends ViewGroup {
     private int mHeight;
     private float mLastY;
     private float mDownY;
+    private int mOrientation;
+    private PointF mPointF;
 
     public RefreshLayout(Context context) {
         this(context, null);
@@ -34,9 +42,7 @@ public class RefreshLayout extends ViewGroup {
     public RefreshLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         mScroller = new Scroller(context);
-
-
-
+        mPointF = new PointF();
 
     }
 
@@ -74,6 +80,7 @@ public class RefreshLayout extends ViewGroup {
             //down
             case 0: {
                 mDownY = mLastY = event.getY();
+                mPointF.set(0, event.getY());
                 break;
             }
             //move
@@ -86,6 +93,12 @@ public class RefreshLayout extends ViewGroup {
                 }
                 scrollBy(0, (int) (Math.abs(dy - mDownY) / getMeasuredHeight() * (mLastY - dy)));
                 mLastY = dy;
+                if (mPointF.y - dy < 0) {
+                    mOrientation = DOWN;
+                } else {
+                    mOrientation = UP;
+                }
+                postInvalidate();
                 break;
             }
             //up
@@ -99,6 +112,7 @@ public class RefreshLayout extends ViewGroup {
                 } else {
                     mScroller.startScroll(0, getScrollY(), 0, -getScrollY());
                 }
+
                 postInvalidate();
                 break;
             }
@@ -130,7 +144,11 @@ public class RefreshLayout extends ViewGroup {
             mTvDesc.setText("refresh...");
             mProgress.setVisibility(GONE);
             mImgIcon.setVisibility(VISIBLE);
-
+            if (mOrientation == UP) {
+                mImgIcon.setImageResource(R.drawable.ic_arrow_upward_white_24dp);
+            } else {
+                mImgIcon.setImageResource(R.drawable.ic_arrow_downward_black_24dp);
+            }
         }
     }
 }

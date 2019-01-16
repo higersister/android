@@ -9,12 +9,15 @@
 
     <declare-styleable name="LoadingView">
 
-        <attr name="loadingBackground" format="color"/>
-        <attr name="isRound" format="boolean"/>
+        <attr name="loadingBackground" format="color" />
+        <attr name="isRound" format="boolean" />
 
     </declare-styleable>
 
-
+    <declare-styleable name="CheckView">
+        <attr name="checkedColor" format="color" />
+        <attr name="unCheckedColor" format="color" />
+    </declare-styleable>
 
 
 </resources>

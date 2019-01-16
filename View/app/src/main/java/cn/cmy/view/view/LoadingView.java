@@ -11,13 +11,17 @@ import android.graphics.MaskFilter;
 import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
+import android.widget.TextView;
 
 import cn.cmy.view.R;
+
+import static cn.cmy.view.view.StickView.TAG;
 
 public class LoadingView extends View {
 
@@ -47,9 +51,10 @@ public class LoadingView extends View {
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-        int width = widthMode == MeasureSpec.EXACTLY ? widthSize : 200;
-        int height = heightMode == MeasureSpec.EXACTLY ? heightSize : 200;
+        int width = widthMode == MeasureSpec.EXACTLY ? widthSize : 100;
+        int height = heightMode == MeasureSpec.EXACTLY ? heightSize : 100;
         setMeasuredDimension(width, height);
+
     }
 
     @Override
@@ -58,6 +63,7 @@ public class LoadingView extends View {
         int num = 360 / 15;
         for (int i = 0; i < num; i++) {
             float degree = num * i;
+            Log.i(TAG, "onDraw: radius:" + RADIUS);
             int dx = (int) (RADIUS * Math.cos(degree * Math.PI / 180));
             int dy = (int) (RADIUS * Math.sin(degree * Math.PI / 180));
             canvas.drawLine(getMeasuredWidth() / 2, getMeasuredHeight() / 2,
@@ -85,8 +91,6 @@ public class LoadingView extends View {
         set.setDuration(1500);
         set.play(rAnim).with(sxAnim).with(syAnim).with(alpha);
         set.start();
-
-
 
     }
 }
