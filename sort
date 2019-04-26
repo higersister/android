@@ -1,0 +1,139 @@
+
+	public static void heapSort(int[] a) {
+		for (int i = (a.length >> 1) - 1; i >= 0; i--) {
+			adjustHeap(a, i, a.length);
+		}
+		for (int i = a.length - 1; i > 0; i--) {
+			swap(a, 0, i);
+			adjustHeap(a, 0, i);
+		}
+	}
+
+	public static void adjustHeap(int[] a, int i, int len) {
+		int temp = a[i];
+		for (int j = (i << 1) + 1; j < len; j = (j << 1) + 1) {
+			if (j + 1 < len && a[j] < a[j + 1])
+				j++;
+			if (a[j] > temp) {
+				a[i] = a[j];
+				i = j;
+			}
+		}
+		a[i] = temp;
+
+	}
+
+	public static void quickSort(int[] a) {
+		quick(a, 0, a.length - 1);
+	}
+
+	public static void quick(int[] a, int low, int high) {
+		if (low < high) {
+			int mid = getPivot(a, low, high);
+			quick(a, low, mid - 1);
+			quick(a, mid + 1, high);
+		}
+	}
+
+	private static int getPivot(int[] a, int low, int high) {
+		int pivot = a[low];
+		while (low < high) {
+			while (low < high && a[high] >= pivot) {
+				high--;
+			}
+			swap(a, low, high);
+			while (low < high && a[low] <= pivot) {
+				low++;
+			}
+			swap(a, low, high);
+
+		}
+		return low;
+
+	}
+
+	public static void mergeSort(int[] a) {
+		mergeSort1(a, 0, a.length - 1);
+	}
+
+	public static void mergeSort1(int[] a, int low, int high) {
+		if (low < high) {
+			int mid = (low + high) >> 1;
+			mergeSort1(a, low, mid);
+			mergeSort1(a, mid + 1, high);
+			merge(a, low, mid, high);
+		}
+
+	}
+
+	public static void merge(int[] a, int low, int mid, int high) {
+		int[] t = new int[high - low + 1];
+		int i = low, j = mid + 1, k = 0;
+		while (i <= mid && j <= high) {
+			if (a[i] < a[j])
+				t[k++] = a[i++];
+			else
+				t[k++] = a[j++];
+		}
+		while (j <= high)
+			t[k++] = a[j++];
+		while (i <= mid)
+			t[k++] = a[i++];
+		System.arraycopy(t, 0, a, low, t.length);
+
+	}
+
+	public static void shellSort(int[] a) {
+		for (int i = (a.length - 1) >> 1; i > 0; i >>= 1) {
+			for (int j = i; j < a.length; j += i) {
+				int k = j - i;
+				int temp = a[j];
+				while (k >= 0 && temp < a[k]) {
+					a[k + i] = a[k];
+					k -= i;
+				}
+				a[k + i] = temp;
+			}
+		}
+
+	}
+
+	public static void insertionSort(int[] a) {
+		for (int i = 0; i < a.length - 1; i++) {
+			int k = i;
+			int temp = a[k + 1];
+			while (k >= 0 && temp < a[k]) {
+				a[k + 1] = a[k];
+				k--;
+			}
+			a[k + 1] = temp;
+		}
+	}
+
+	public static void selectionSort(int[] a) {
+		for (int i = 0; i < a.length - 1; i++) {
+			int k = i;
+			for (int j = i + 1; j < a.length; j++) {
+				if (a[k] > a[j]) {
+					k = j;
+				}
+			}
+			if (k != i)
+				swap(a, k, i);
+		}
+	}
+
+	public static void bubbleSort(int[] a) {
+		for (int i = 0; i < a.length; i++) {
+			for (int j = 0; j < a.length - 1 - i; j++) {
+				if (a[j] > a[j + 1])
+					swap(a, j, j + 1);
+			}
+		}
+	}
+
+	private static void swap(int[] a, int i, int j) {
+		int temp = a[i];
+		a[i] = a[j];
+		a[j] = temp;
+	}
