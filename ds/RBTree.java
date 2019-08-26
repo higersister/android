@@ -4,6 +4,7 @@ package com.cmy.test;
  * @author higher sister
  * @version 2019-8-13
  * @see https://blog.csdn.net/eson_15/article/details/51144079
+ * @see https://www.cnblogs.com/xingele0917/p/3848278.html#a4
  * @link TreeMap
  */
 public class RBTree<T extends Comparable<T>> {
